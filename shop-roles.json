@@ -1,0 +1,143 @@
+[
+  {
+    "name": "🔰 Rookie Spy",
+    "cost": 500,
+    "color": 7834787,
+    "hoist": false,
+    "permissions": [
+      "AddReactions",
+      "UseExternalEmojis",
+      "UseApplicationCommands"
+    ]
+  },
+  {
+    "name": "🕵️ Field Agent",
+    "cost": 1500,
+    "color": 2547329,
+    "hoist": false,
+    "permissions": [
+      "AddReactions",
+      "UseExternalEmojis",
+      "UseApplicationCommands",
+      "ChangeNickname",
+      "EmbedLinks",
+      "AttachFiles"
+    ]
+  },
+  {
+    "name": "🗂️ Senior Agent",
+    "cost": 4000,
+    "color": 4565746,
+    "hoist": false,
+    "permissions": [
+      "AddReactions",
+      "UseExternalEmojis",
+      "UseApplicationCommands",
+      "ChangeNickname",
+      "EmbedLinks",
+      "AttachFiles",
+      "Connect",
+      "Speak",
+      "UseVAD",
+      "Stream"
+    ]
+  },
+  {
+    "name": "💼 Elite Operative",
+    "cost": 10000,
+    "color": 10837738,
+    "hoist": true,
+    "permissions": [
+      "AddReactions",
+      "UseExternalEmojis",
+      "UseExternalStickers",
+      "UseApplicationCommands",
+      "ChangeNickname",
+      "EmbedLinks",
+      "AttachFiles",
+      "Connect",
+      "Speak",
+      "UseVAD",
+      "Stream",
+      "PrioritySpeaker"
+    ]
+  },
+  {
+    "name": "🧠 Shadow Analyst",
+    "cost": 25000,
+    "color": 8934608,
+    "hoist": true,
+    "permissions": [
+      "AddReactions",
+      "UseExternalEmojis",
+      "UseExternalStickers",
+      "UseApplicationCommands",
+      "ChangeNickname",
+      "EmbedLinks",
+      "AttachFiles",
+      "Connect",
+      "Speak",
+      "UseVAD",
+      "Stream",
+      "PrioritySpeaker",
+      "ManageMessages",
+      "MuteMembers"
+    ]
+  },
+  {
+    "name": "🎖️ Master Spy",
+    "cost": 60000,
+    "color": 16234289,
+    "hoist": true,
+    "permissions": [
+      "AddReactions",
+      "UseExternalEmojis",
+      "UseExternalStickers",
+      "UseApplicationCommands",
+      "ChangeNickname",
+      "EmbedLinks",
+      "AttachFiles",
+      "Connect",
+      "Speak",
+      "UseVAD",
+      "Stream",
+      "PrioritySpeaker",
+      "ManageMessages",
+      "MuteMembers",
+      "DeafenMembers",
+      "MoveMembers",
+      "ManageNicknames",
+      "ManageThreads",
+      "ViewAuditLog"
+    ]
+  },
+  {
+    "name": "👑 Director",
+    "cost": 150000,
+    "color": 16538725,
+    "hoist": true,
+    "permissions": [
+      "AddReactions",
+      "UseExternalEmojis",
+      "UseExternalStickers",
+      "UseApplicationCommands",
+      "ChangeNickname",
+      "EmbedLinks",
+      "AttachFiles",
+      "Connect",
+      "Speak",
+      "UseVAD",
+      "Stream",
+      "PrioritySpeaker",
+      "ManageMessages",
+      "MuteMembers",
+      "DeafenMembers",
+      "MoveMembers",
+      "ManageNicknames",
+      "ManageThreads",
+      "ViewAuditLog",
+      "KickMembers",
+      "ManageWebhooks"
+    ]
+  }
+]
