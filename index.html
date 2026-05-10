@@ -1,1 +1,771 @@
-<html>Hello<</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SpyraZ Bot — Spy Coins Economy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --black: #080a0f;
+  --dark: #0d1117;
+  --card: #111620;
+  --border: #1e2535;
+  --gold: #e8c44a;
+  --gold-dim: #a88a28;
+  --crimson: #c23b3b;
+  --mint: #26de81;
+  --sky: #45aaf2;
+  --muted: #5a6480;
+  --text: #c8d0e0;
+  --white: #f0f4ff;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content:'';
+  position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.6;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 1.2rem 6%;
+  background: rgba(8,10,15,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.7rem;
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-decoration: none;
+}
+.nav-logo span { color: var(--white); }
+
+.nav-links { display:flex; gap:2rem; list-style:none; }
+.nav-links a {
+  color: var(--muted); text-decoration:none; font-size:.85rem;
+  font-weight:600; letter-spacing:1px; text-transform:uppercase;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--gold); }
+
+.btn-invite {
+  background: var(--gold);
+  color: var(--black);
+  font-family: 'Syne', sans-serif;
+  font-weight:800; font-size:.82rem;
+  letter-spacing:1.5px; text-transform:uppercase;
+  padding:.6rem 1.4rem; border-radius:4px;
+  text-decoration:none; transition: all .2s;
+  border: none; cursor:pointer;
+}
+.btn-invite:hover { background:#f5d76e; transform:translateY(-1px); box-shadow:0 4px 20px rgba(232,196,74,.3); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding: 8rem 6% 4rem;
+  position:relative;
+}
+
+.hero-bg {
+  position:absolute; inset:0; z-index:-1;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(232,196,74,.06) 0%, transparent 70%),
+              radial-gradient(ellipse 50% 40% at 80% 80%, rgba(194,59,59,.05) 0%, transparent 60%);
+}
+
+.hero-badge {
+  display:inline-flex; align-items:center; gap:.5rem;
+  background: rgba(232,196,74,.08); border:1px solid rgba(232,196,74,.2);
+  padding:.4rem 1rem; border-radius:50px; font-size:.75rem;
+  font-weight:600; letter-spacing:2px; text-transform:uppercase;
+  color: var(--gold); margin-bottom:2rem;
+  animation: fadeUp .6s ease both;
+}
+
+.hero h1 {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(5rem, 14vw, 11rem);
+  line-height: .9;
+  letter-spacing: 4px;
+  color: var(--white);
+  animation: fadeUp .7s .1s ease both;
+}
+.hero h1 span { color: var(--gold); }
+
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--muted); max-width:520px;
+  margin: 1.5rem auto 2.5rem;
+  font-weight:400; line-height:1.7;
+  animation: fadeUp .7s .2s ease both;
+}
+
+.hero-cta {
+  display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;
+  animation: fadeUp .7s .3s ease both;
+}
+
+.btn-primary {
+  background: var(--gold); color: var(--black);
+  font-family:'Syne',sans-serif; font-weight:800; font-size:.9rem;
+  letter-spacing:1.5px; text-transform:uppercase;
+  padding:.85rem 2rem; border-radius:4px;
+  text-decoration:none; transition:all .2s; display:inline-flex; align-items:center; gap:.5rem;
+}
+.btn-primary:hover { background:#f5d76e; transform:translateY(-2px); box-shadow:0 8px 30px rgba(232,196,74,.35); }
+
+.btn-secondary {
+  background:transparent; color:var(--text);
+  font-family:'Syne',sans-serif; font-weight:700; font-size:.9rem;
+  letter-spacing:1px; text-transform:uppercase;
+  padding:.85rem 2rem; border-radius:4px;
+  text-decoration:none; border:1px solid var(--border);
+  transition:all .2s; display:inline-flex; align-items:center; gap:.5rem;
+}
+.btn-secondary:hover { border-color:var(--gold); color:var(--gold); }
+
+.hero-stats {
+  display:flex; gap:3rem; margin-top:5rem; flex-wrap:wrap; justify-content:center;
+  animation: fadeUp .7s .4s ease both;
+}
+.hero-stat { text-align:center; }
+.hero-stat-num { font-family:'Bebas Neue',cursive; font-size:2.8rem; color:var(--gold); line-height:1; }
+.hero-stat-label { font-size:.72rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-top:.3rem; }
+
+/* ── SECTION BASE ── */
+section { padding:6rem 6%; position:relative; }
+
+.section-label {
+  font-size:.72rem; letter-spacing:3px; text-transform:uppercase;
+  color:var(--gold); font-weight:700; margin-bottom:.8rem;
+}
+.section-title {
+  font-family:'Bebas Neue',cursive;
+  font-size:clamp(2.5rem,6vw,4rem);
+  color:var(--white); line-height:1; letter-spacing:2px;
+  margin-bottom:1rem;
+}
+.section-desc { color:var(--muted); max-width:520px; line-height:1.7; margin-bottom:3rem; }
+
+/* ── DIVIDER ── */
+.divider { border:none; border-top:1px solid var(--border); margin: 0 6%; }
+
+/* ── FEATURES ── */
+.features-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:1.5rem;
+}
+.feature-card {
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+  padding:2rem; position:relative; overflow:hidden;
+  transition: border-color .2s, transform .2s;
+}
+.feature-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform:scaleX(0); transition:.3s;
+}
+.feature-card:hover { border-color:rgba(232,196,74,.3); transform:translateY(-3px); }
+.feature-card:hover::before { transform:scaleX(1); }
+.feature-icon { font-size:2rem; margin-bottom:1rem; }
+.feature-card h3 { font-size:1rem; font-weight:700; letter-spacing:1px; color:var(--white); margin-bottom:.6rem; }
+.feature-card p { font-size:.85rem; color:var(--muted); line-height:1.6; }
+
+/* ── COMMANDS ── */
+.commands-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(320px,1fr)); gap:1rem;
+}
+.cmd-card {
+  background:var(--card); border:1px solid var(--border); border-radius:6px;
+  padding:1.2rem 1.4rem; display:flex; align-items:flex-start; gap:1rem;
+  transition: border-color .2s;
+}
+.cmd-card:hover { border-color:rgba(232,196,74,.2); }
+.cmd-name {
+  font-family:'JetBrains Mono',monospace; font-size:.88rem;
+  color:var(--gold); white-space:nowrap; padding-top:.1rem;
+}
+.cmd-info { flex:1; }
+.cmd-desc { font-size:.82rem; color:var(--text); line-height:1.5; }
+.cmd-badge {
+  font-size:.65rem; letter-spacing:1.5px; text-transform:uppercase;
+  padding:.2rem .5rem; border-radius:3px; font-weight:700; flex-shrink:0;
+}
+.badge-everyone { background:rgba(38,222,129,.1); color:var(--mint); }
+.badge-admin    { background:rgba(194,59,59,.1); color:var(--crimson); }
+.badge-special  { background:rgba(232,196,74,.1); color:var(--gold); }
+
+/* ── ECONOMY ── */
+.economy-layout {
+  display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:start;
+}
+@media(max-width:760px){ .economy-layout{grid-template-columns:1fr;} }
+
+.eco-card {
+  background:var(--card); border:1px solid var(--border); border-radius:8px; padding:2rem;
+}
+.eco-card h3 { font-size:.8rem; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:1.4rem; }
+
+.rule-list { list-style:none; display:flex; flex-direction:column; gap:.8rem; }
+.rule-list li {
+  display:flex; align-items:center; gap:.8rem; font-size:.88rem; color:var(--text); line-height:1.4;
+}
+.rule-dot { width:6px; height:6px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+
+.stat-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:.8rem 0; border-bottom:1px solid var(--border); font-size:.88rem;
+}
+.stat-row:last-child { border-bottom:none; }
+.stat-label { color:var(--muted); }
+.stat-val { font-family:'JetBrains Mono',monospace; color:var(--gold); font-weight:500; }
+
+/* ── SHOP ROLES ── */
+.roles-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:1.2rem;
+}
+.role-card {
+  border-radius:8px; padding:1.8rem 1.5rem;
+  border:1px solid var(--border); background:var(--card);
+  transition: transform .2s, box-shadow .2s; position:relative; overflow:hidden;
+}
+.role-card:hover { transform:translateY(-4px); }
+.role-stripe {
+  position:absolute; top:0; left:0; right:0; height:3px;
+}
+.role-name { font-size:1rem; font-weight:700; color:var(--white); margin-bottom:.3rem; }
+.role-cost {
+  font-family:'JetBrains Mono',monospace; font-size:1.3rem;
+  font-weight:500; margin-bottom:1rem;
+}
+.role-perms { list-style:none; display:flex; flex-direction:column; gap:.35rem; }
+.role-perms li { font-size:.75rem; color:var(--muted); display:flex; align-items:center; gap:.4rem; }
+.role-perms li::before { content:'✓'; color:var(--mint); font-weight:700; }
+
+/* ── FRUITS ── */
+.fruits-wrap {
+  background:var(--card); border:1px solid var(--border); border-radius:8px; padding:2rem;
+}
+.fruits-search {
+  width:100%; background:#0a0d13; border:1px solid var(--border); border-radius:4px;
+  color:var(--white); font-family:'Syne',sans-serif; font-size:.9rem;
+  padding:.7rem 1rem; margin-bottom:1.5rem; outline:none;
+  transition: border-color .2s;
+}
+.fruits-search:focus { border-color:var(--gold); }
+.fruits-table { width:100%; border-collapse:collapse; }
+.fruits-table th {
+  text-align:left; font-size:.7rem; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); padding:.5rem .8rem; border-bottom:1px solid var(--border);
+}
+.fruits-table td { padding:.55rem .8rem; font-size:.85rem; border-bottom:1px solid rgba(30,37,53,.5); }
+.fruits-table tr:last-child td { border-bottom:none; }
+.fruits-table tr:hover td { background:rgba(232,196,74,.03); }
+.fruit-name { color:var(--text); font-weight:500; }
+.fruit-price { font-family:'JetBrains Mono',monospace; color:var(--gold); }
+.fruit-tier { font-size:.7rem; padding:.15rem .5rem; border-radius:3px; font-weight:700; letter-spacing:1px; }
+.tier-common   { background:rgba(90,100,128,.2); color:var(--muted); }
+.tier-rare     { background:rgba(69,170,242,.1); color:var(--sky); }
+.tier-epic     { background:rgba(165,94,234,.1); color:#a55eea; }
+.tier-legendary{ background:rgba(232,196,74,.1); color:var(--gold); }
+.tier-mythical { background:rgba(194,59,59,.1); color:var(--crimson); }
+
+/* ── INVITE SECTION ── */
+.invite-section {
+  text-align:center; padding:7rem 6%;
+  background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(232,196,74,.06) 0%, transparent 70%);
+}
+.invite-section .section-title { margin-bottom:.8rem; }
+.invite-section .section-desc { margin:0 auto 2.5rem; }
+
+/* ── FOOTER ── */
+footer {
+  border-top:1px solid var(--border); padding:2.5rem 6%;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;
+}
+.footer-brand { font-family:'Bebas Neue',cursive; font-size:1.2rem; letter-spacing:3px; color:var(--gold); }
+.footer-links { display:flex; gap:1.5rem; }
+.footer-links a { color:var(--muted); text-decoration:none; font-size:.8rem; transition:color .2s; }
+.footer-links a:hover { color:var(--gold); }
+.footer-copy { font-size:.75rem; color:var(--muted); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.reveal {
+  opacity:0; transform:translateY(28px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.visible { opacity:1; transform:none; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--black); }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:var(--gold-dim); }
+
+/* ── MOBILE ── */
+@media(max-width:640px){
+  .nav-links { display:none; }
+  .hero h1 { font-size:4.5rem; }
+  .hero-stats { gap:1.5rem; }
+  footer { flex-direction:column; text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-logo" href="#">Spy<span>raZ</span></a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#commands">Commands</a></li>
+    <li><a href="#shop">Shop</a></li>
+    <li><a href="#fruits">Fruits</a></li>
+  </ul>
+  <a class="btn-invite" href="https://discord.com/oauth2/authorize?client_id=1495442405099442398&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank">
+    ➕ Add to Server
+  </a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-badge">🕵️ Discord Economy Bot</div>
+  <h1>SPY<span>COINZ</span></h1>
+  <p class="hero-sub">Earn coins by chatting, invite friends, buy powerful roles & Blox Fruits. A full economy system for your Discord server.</p>
+  <div class="hero-cta">
+    <a class="btn-primary" href="https://discord.com/oauth2/authorize?client_id=1495442405099442398&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank">
+      ➕ &nbsp;Add to Server
+    </a>
+    <a class="btn-secondary" href="#commands">📋 &nbsp;View Commands</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">15</div><div class="hero-stat-label">Commands</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">7</div><div class="hero-stat-label">Shop Roles</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">40+</div><div class="hero-stat-label">Blox Fruits</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">∞</div><div class="hero-stat-label">Fun</div></div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ── FEATURES ── -->
+<section id="features">
+  <div class="reveal">
+    <div class="section-label">What it does</div>
+    <h2 class="section-title">Everything your server needs</h2>
+    <p class="section-desc">SpyraZ brings a full economy, invite tracking, role shop, and Blox Fruits marketplace all in one bot.</p>
+  </div>
+  <div class="features-grid reveal">
+    <div class="feature-card">
+      <div class="feature-icon">💬</div>
+      <h3>Chat to Earn</h3>
+      <p>Members earn <strong>3 coins per message</strong> with a 30s cooldown and a 600 coin/day cap. No spam farming.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📨</div>
+      <h3>Invite Rewards</h3>
+      <p>Invite someone → they send 10 messages + stay 1 hour → you earn <strong>+50 coins</strong>. If they leave, −50. Fair system.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🛒</div>
+      <h3>Role Shop</h3>
+      <p>7 tiered roles from Rookie Spy to Director. Buy them with coins, get real Discord permissions. Roles auto-created on startup.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🍎</div>
+      <h3>Blox Fruits Market</h3>
+      <p>Buy any Blox Fruit with your Spy Coins. <strong>40+ fruits</strong> with autocomplete search. Admin delivers in-game.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎟️</div>
+      <h3>Redeem Codes</h3>
+      <p>Redeem special codes for <strong>1,111 coins</strong> each. Great for giveaways. Each code is one-time per account.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎁</div>
+      <h3>Gift System</h3>
+      <p>Send coins to any member with an optional message. DM notification included. Track how much you've gifted.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏆</div>
+      <h3>Leaderboard</h3>
+      <p>Top 10 richest members displayed with medals. See your rank at the bottom even if you're not in the top 10.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📹</div>
+      <h3>Video Requests</h3>
+      <p>Members can request to appear in Abhay's videos. Requests post automatically to your set channel.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🆔</div>
+      <h3>Profile Cards</h3>
+      <p>Every member gets a profile with bio, roles, coin balance, and a special "Text from own" field for those with access.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ── ECONOMY ── -->
+<section id="economy">
+  <div class="reveal">
+    <div class="section-label">How coins work</div>
+    <h2 class="section-title">Economy Rules</h2>
+  </div>
+  <div class="economy-layout reveal">
+    <div class="eco-card">
+      <h3>📜 Earning Rules</h3>
+      <ul class="rule-list">
+        <li><span class="rule-dot"></span>3 coins per message sent</li>
+        <li><span class="rule-dot"></span>30 second cooldown between earning messages</li>
+        <li><span class="rule-dot"></span>Maximum 600 coins earnable per day via chat</li>
+        <li><span class="rule-dot"></span>+50 coins when your invite qualifies (10 msgs + 1 hr)</li>
+        <li><span class="rule-dot"></span>−50 coins if your qualified invitee leaves</li>
+        <li><span class="rule-dot"></span>+1,111 coins per redeemed code (one-time each)</li>
+        <li><span class="rule-dot"></span>Receive coins as gifts from other members</li>
+      </ul>
+    </div>
+    <div class="eco-card">
+      <h3>📊 Quick Numbers</h3>
+      <div class="stat-row"><span class="stat-label">Coins per message</span><span class="stat-val">3</span></div>
+      <div class="stat-row"><span class="stat-label">Message cooldown</span><span class="stat-val">30s</span></div>
+      <div class="stat-row"><span class="stat-label">Daily cap (chat)</span><span class="stat-val">600</span></div>
+      <div class="stat-row"><span class="stat-label">Days to 600/day</span><span class="stat-val">200 msgs</span></div>
+      <div class="stat-row"><span class="stat-label">Invite reward</span><span class="stat-val">+50</span></div>
+      <div class="stat-row"><span class="stat-label">Invite penalty</span><span class="stat-val">−50</span></div>
+      <div class="stat-row"><span class="stat-label">Redeem reward</span><span class="stat-val">1,111</span></div>
+      <div class="stat-row"><span class="stat-label">Cheapest role</span><span class="stat-val">500</span></div>
+      <div class="stat-row"><span class="stat-label">Most expensive role</span><span class="stat-val">150,000</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ── COMMANDS ── -->
+<section id="commands">
+  <div class="reveal">
+    <div class="section-label">All slash commands</div>
+    <h2 class="section-title">Commands</h2>
+    <p class="section-desc">All commands use Discord's slash command system — type <code style="color:var(--gold);background:var(--card);padding:.1rem .4rem;border-radius:3px">/</code> to see them.</p>
+  </div>
+  <div class="commands-grid reveal">
+
+    <div class="cmd-card">
+      <div class="cmd-name">/balance</div>
+      <div class="cmd-info"><div class="cmd-desc">Check your Spy Coin balance + today's earning progress bar.</div></div>
+      <span class="cmd-badge badge-everyone">Everyone</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/redeem</div>
+      <div class="cmd-info"><div class="cmd-desc">Redeem a special code for 1,111 Spy Coins. One-time per account.</div></div>
+      <span class="cmd-badge badge-everyone">Everyone</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/shop</div>
+      <div class="cmd-info"><div class="cmd-desc">Open the role shop and buy roles with your coins via dropdown menu.</div></div>
+      <span class="cmd-badge badge-everyone">Everyone</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/buy-fruits</div>
+      <div class="cmd-info"><div class="cmd-desc">Buy a Blox Fruit with autocomplete search. Admin delivers in-game.</div></div>
+      <span class="cmd-badge badge-everyone">Everyone</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/list-of-fruits</div>
+      <div class="cmd-info"><div class="cmd-desc">See all 40+ Blox Fruits and their Spy Coin prices in a clean list.</div></div>
+      <span class="cmd-badge badge-everyone">Everyone</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/gift @user [coins]</div>
+      <div class="cmd-info"><div class="cmd-desc">Send Spy Coins to someone with an optional personal message.</div></div>
+      <span class="cmd-badge badge-everyone">Everyone</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/leaderboard</div>
+      <div class="cmd-info"><div class="cmd-desc">Top 10 richest members with medals. Shows your rank at the bottom.</div></div>
+      <span class="cmd-badge badge-everyone">Everyone</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/invite-stats</div>
+      <div class="cmd-info"><div class="cmd-desc">See how many people you've invited, who qualified, and coins earned.</div></div>
+      <span class="cmd-badge badge-everyone">Everyone</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/come-in-video</div>
+      <div class="cmd-info"><div class="cmd-desc">Submit a request to appear in Abhay's next video. Sent to admin channel.</div></div>
+      <span class="cmd-badge badge-everyone">Everyone</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/editme</div>
+      <div class="cmd-info"><div class="cmd-desc">Edit your profile bio and personal message (if unlocked).</div></div>
+      <span class="cmd-badge badge-everyone">Everyone</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/view-user @user</div>
+      <div class="cmd-info"><div class="cmd-desc">View any member's spy profile — bio, coins, roles, and personal text.</div></div>
+      <span class="cmd-badge badge-everyone">Everyone</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/owner-code</div>
+      <div class="cmd-info"><div class="cmd-desc">Enter the owner code to unlock the "Text from own" profile field.</div></div>
+      <span class="cmd-badge badge-special">Special</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/admin-code</div>
+      <div class="cmd-info"><div class="cmd-desc">Secret admin command to add coins to your account. Attempts are logged.</div></div>
+      <span class="cmd-badge badge-admin">Admin</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/addrole</div>
+      <div class="cmd-info"><div class="cmd-desc">Add a new role to the shop with a custom name, cost, and hex color.</div></div>
+      <span class="cmd-badge badge-admin">Admin</span>
+    </div>
+
+    <div class="cmd-card">
+      <div class="cmd-name">/if-com-in-video</div>
+      <div class="cmd-info"><div class="cmd-desc">Set the channel where video appearance requests are posted.</div></div>
+      <span class="cmd-badge badge-admin">Admin</span>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ── SHOP ROLES ── -->
+<section id="shop">
+  <div class="reveal">
+    <div class="section-label">Role Shop</div>
+    <h2 class="section-title">Buy Roles with Coins</h2>
+    <p class="section-desc">Spend your Spy Coins on server roles that come with real Discord permissions. Roles are automatically created when the bot starts.</p>
+  </div>
+  <div class="roles-grid reveal">
+
+    <div class="role-card" style="border-color:rgba(119,140,163,.3)">
+      <div class="role-stripe" style="background:#778ca3"></div>
+      <div class="role-name">🔰 Rookie Spy</div>
+      <div class="role-cost" style="color:#778ca3">500 coins</div>
+      <ul class="role-perms">
+        <li>Add Reactions</li>
+        <li>External Emojis</li>
+        <li>Slash Commands</li>
+      </ul>
+    </div>
+
+    <div class="role-card" style="border-color:rgba(38,222,129,.3)">
+      <div class="role-stripe" style="background:#26de81"></div>
+      <div class="role-name">🕵️ Field Agent</div>
+      <div class="role-cost" style="color:#26de81">1,500 coins</div>
+      <ul class="role-perms">
+        <li>Everything above</li>
+        <li>Change Nickname</li>
+        <li>Embed Links</li>
+        <li>Attach Files</li>
+      </ul>
+    </div>
+
+    <div class="role-card" style="border-color:rgba(69,170,242,.3)">
+      <div class="role-stripe" style="background:#45aaf2"></div>
+      <div class="role-name">🗂️ Senior Agent</div>
+      <div class="role-cost" style="color:#45aaf2">4,000 coins</div>
+      <ul class="role-perms">
+        <li>Everything above</li>
+        <li>Join Voice Channels</li>
+        <li>Speak & Stream</li>
+      </ul>
+    </div>
+
+    <div class="role-card" style="border-color:rgba(165,94,234,.3)">
+      <div class="role-stripe" style="background:#a55eea"></div>
+      <div class="role-name">💼 Elite Operative</div>
+      <div class="role-cost" style="color:#a55eea">10,000 coins</div>
+      <ul class="role-perms">
+        <li>Everything above</li>
+        <li>External Stickers</li>
+        <li>Priority Speaker</li>
+        <li style="color:#a55eea;font-size:.7rem">★ Hoisted Role</li>
+      </ul>
+    </div>
+
+    <div class="role-card" style="border-color:rgba(136,84,208,.3)">
+      <div class="role-stripe" style="background:#8854d0"></div>
+      <div class="role-name">🧠 Shadow Analyst</div>
+      <div class="role-cost" style="color:#8854d0">25,000 coins</div>
+      <ul class="role-perms">
+        <li>Everything above</li>
+        <li>Manage Messages</li>
+        <li>Mute Members</li>
+        <li style="color:#8854d0;font-size:.7rem">★ Hoisted Role</li>
+      </ul>
+    </div>
+
+    <div class="role-card" style="border-color:rgba(247,183,49,.3)">
+      <div class="role-stripe" style="background:#f7b731"></div>
+      <div class="role-name">🎖️ Master Spy</div>
+      <div class="role-cost" style="color:#f7b731">60,000 coins</div>
+      <ul class="role-perms">
+        <li>Everything above</li>
+        <li>Move / Deafen Members</li>
+        <li>Manage Nicknames</li>
+        <li>Manage Threads</li>
+        <li style="color:#f7b731;font-size:.7rem">★ Hoisted Role</li>
+      </ul>
+    </div>
+
+    <div class="role-card" style="border-color:rgba(194,59,59,.4)">
+      <div class="role-stripe" style="background:#fc5c65"></div>
+      <div class="role-name">👑 Director</div>
+      <div class="role-cost" style="color:#fc5c65">150,000 coins</div>
+      <ul class="role-perms">
+        <li>Everything above</li>
+        <li>Kick Members</li>
+        <li>Manage Webhooks</li>
+        <li style="color:#fc5c65;font-size:.7rem">★ Hoisted — Top Tier</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ── FRUITS ── -->
+<section id="fruits">
+  <div class="reveal">
+    <div class="section-label">Blox Fruits Marketplace</div>
+    <h2 class="section-title">All Fruits & Prices</h2>
+    <p class="section-desc">Use <code style="color:var(--gold);background:var(--card);padding:.1rem .4rem;border-radius:3px">/buy-fruits</code> to purchase. Admin delivers in-game. Search below to find any fruit.</p>
+  </div>
+  <div class="fruits-wrap reveal">
+    <input class="fruits-search" type="text" placeholder="🔍  Search fruit name…" id="fruitSearch" oninput="filterFruits()"/>
+    <table class="fruits-table">
+      <thead>
+        <tr>
+          <th>Fruit</th>
+          <th>Price (Spy Coins)</th>
+          <th>Tier</th>
+        </tr>
+      </thead>
+      <tbody id="fruitsBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ── INVITE CTA ── -->
+<section class="invite-section reveal">
+  <div class="section-label">Ready?</div>
+  <h2 class="section-title">Add SpyraZ to your server</h2>
+  <p class="section-desc">Free, fast, and fully automatic. Roles are created instantly on startup. No setup needed — just invite and go.</p>
+  <a class="btn-primary" style="font-size:1rem;padding:1rem 2.5rem" href="https://discord.com/oauth2/authorize?client_id=1495442405099442398&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank">
+    ➕ &nbsp;Add to Server — It's Free
+  </a>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-brand">SpyraZ</div>
+  <div class="footer-links">
+    <a href="#features">Features</a>
+    <a href="#commands">Commands</a>
+    <a href="#shop">Shop</a>
+    <a href="#fruits">Fruits</a>
+    <a href="https://discord.com/oauth2/authorize?client_id=1495442405099442398&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank">Invite Bot</a>
+  </div>
+  <div class="footer-copy">Made by Abhay &nbsp;·&nbsp; Spy Coins Economy Bot</div>
+</footer>
+
+<script>
+// ── Fruit Data ──
+const fruits = [
+  ['Rocket',40],['Spin',60],['Blade',450],['Spring',500],['Bomb',700],
+  ['Smoke',850],['Spike',1500],['Flame',2000],['Dark',3500],['Sand',3800],
+  ['Ice',5000],['Rubber',6000],['Eagle',7000],['Ghost',7000],['Light',7000],
+  ['Diamond',9000],['Quake',9000],['Magma',10000],['Love',13000],['Spider',13000],
+  ['Sound',22000],['Phoenix',25000],['Creation',30000],['Blizzard',45000],
+  ['Shadow',55000],['Gravity',90000],['Pain',90000],['Buddha',90000],
+  ['Portal',90000],['Spirit',90000],['Mammoth',90000],['T-Rex',175000],
+  ['Dough',270000],['Gas',550000],['Lightning',720000],['Control',1250000],
+  ['Yeti',1350000],['Tiger',1450000],['Kitsune',4200000],
+  ['East Dragon',28000000],['West Dragon',32000000]
+];
+
+function getTier(price) {
+  if (price < 1000)    return ['Common',   'tier-common'];
+  if (price < 15000)   return ['Rare',     'tier-rare'];
+  if (price < 100000)  return ['Epic',     'tier-epic'];
+  if (price < 2000000) return ['Legendary','tier-legendary'];
+  return ['Mythical','tier-mythical'];
+}
+
+function fmt(n) { return n.toLocaleString('en-US'); }
+
+function renderFruits(list) {
+  const tbody = document.getElementById('fruitsBody');
+  tbody.innerHTML = list.map(([name, price]) => {
+    const [label, cls] = getTier(price);
+    return `<tr>
+      <td class="fruit-name">${name}</td>
+      <td class="fruit-price">${fmt(price)}</td>
+      <td><span class="fruit-tier ${cls}">${label}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterFruits() {
+  const q = document.getElementById('fruitSearch').value.toLowerCase();
+  renderFruits(fruits.filter(([n]) => n.toLowerCase().includes(q)));
+}
+
+renderFruits(fruits);
+
+// ── Scroll Reveal ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
